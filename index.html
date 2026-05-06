@@ -235,6 +235,12 @@
         max-width: 100%;
         width: min(100%, 320px);
         height: 72px;
+        visibility: hidden;
+        opacity: 0;
+      }
+      #page1 .page1-pdf-final.is-ready {
+        visibility: visible;
+        opacity: 1;
       }
 
       .input-row {
@@ -1616,11 +1622,14 @@
             aria-label="완벽한 관리자"
           >
             <object
+              id="page1-pdf-final"
               class="page1-pdf-final"
               type="application/pdf"
               data="../../%EC%B5%9C%EC%A2%85%20%EB%A1%9C%EA%B3%A0.pdf"
               width="320"
               height="72"
+              onload="handlePage1PdfLoad(true)"
+              onerror="handlePage1PdfLoad(false)"
             ></object>
           </div>
           <header class="header">
@@ -3082,6 +3091,13 @@
         return { y, m, d, ampm, h12, min10 };
       }
 
+      function handlePage1PdfLoad(ok) {
+        const pdfEl = document.getElementById("page1-pdf-final");
+        if (!pdfEl) return;
+        if (ok) pdfEl.classList.add("is-ready");
+        else pdfEl.classList.remove("is-ready");
+      }
+
       window.onload = () => {
         const years = document.querySelectorAll(".sel-year");
         const months = document.querySelectorAll(".sel-month");
@@ -3483,13 +3499,9 @@
       }
 
       function syncMasterExportUiVisibility() {
-        let hintOn = false;
-        try {
-          hintOn = localStorage.getItem(MASTER_EXPORT_LS_KEY) === "1";
-        } catch (e) {}
         const active = !!(currentUser && currentUser.isMaster);
         const p1 = document.getElementById("page1-master-member-dl");
-        if (p1) p1.style.display = hintOn ? "block" : "none";
+        if (p1) p1.style.display = active ? "block" : "none";
         const vis = active ? "block" : "none";
         [
           "page14-master-schedule-dl",
@@ -3544,11 +3556,7 @@
 
       function masterDownloadMembersCsv() {
         const activeMaster = currentUser && currentUser.isMaster;
-        let hinted = false;
-        try {
-          hinted = localStorage.getItem(MASTER_EXPORT_LS_KEY) === "1";
-        } catch (e) {}
-        if (!activeMaster && !hinted) {
+        if (!activeMaster) {
           alert("마스터만 이용할 수 있습니다.");
           return;
         }
