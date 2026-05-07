@@ -340,12 +340,26 @@
         font-size: 32px;
         flex-shrink: 0;
         text-align: left;
-        padding-left: 4px;
         min-width: 0;
       }
       #page14 .hub-section-label {
-        padding-left: 54px;
         font-size: calc(32px * 2 / 3);
+      }
+      #page14 .hub-section-label-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: 30px;
+      }
+      #page14 .hub-section-icon {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+        flex-shrink: 0;
+        -webkit-user-select: none;
+        user-select: none;
+        pointer-events: none;
       }
       .hub-section-btns {
         display: flex;
@@ -402,9 +416,23 @@
         align-content: start;
       }
       #page3 .dashboard-btn {
-        padding: 8px 10px;
-        min-height: 64px;
+        flex-direction: column;
+        gap: 10px;
+        padding: 16px 10px;
+        min-height: 118px;
         box-shadow: 0 2px 0 #182b1a;
+      }
+      #page3 .dashboard-btn-icon {
+        width: min(56px, 28vw);
+        height: min(56px, 28vw);
+        object-fit: contain;
+        flex-shrink: 0;
+        -webkit-user-select: none;
+        user-select: none;
+        pointer-events: none;
+      }
+      #page3 .dashboard-btn-label {
+        line-height: 1.25;
       }
 
       .reg-title {
@@ -1757,11 +1785,37 @@
           </header>
           <div class="dashboard-grid">
             <div class="dashboard-btn" onclick="showPage('page14')">
-              등록 Ι 일정
+              <img
+                class="dashboard-btn-icon"
+                src="https://i.ibb.co/1YqrbYLf/Asset-1.png"
+                alt=""
+              />
+              <span class="dashboard-btn-label">등록 Ι 일정</span>
             </div>
-            <div class="dashboard-btn" onclick="showPage('page8')">매출</div>
-            <div class="dashboard-btn" onclick="showPage('page11')">비용</div>
-            <div class="dashboard-btn" onclick="showPage('page15')">통계</div>
+            <div class="dashboard-btn" onclick="showPage('page8')">
+              <img
+                class="dashboard-btn-icon"
+                src="https://i.ibb.co/G3RGxGv5/Asset-2.png"
+                alt=""
+              />
+              <span class="dashboard-btn-label">매출</span>
+            </div>
+            <div class="dashboard-btn" onclick="showPage('page11')">
+              <img
+                class="dashboard-btn-icon"
+                src="https://i.ibb.co/vvRV5dSc/Asset-3.png"
+                alt=""
+              />
+              <span class="dashboard-btn-label">비용</span>
+            </div>
+            <div class="dashboard-btn" onclick="showPage('page15')">
+              <img
+                class="dashboard-btn-icon"
+                src="https://i.ibb.co/vvk1Dkw1/Asset-4.png"
+                alt=""
+              />
+              <span class="dashboard-btn-label">통계</span>
+            </div>
           </div>
           <div class="bottom-area">
             <div class="nav-links">
@@ -1786,7 +1840,14 @@
             <p id="user-info-hub" class="hub-greeting"></p>
           </header>
           <div class="hub-work-section">
-            <div class="hub-section-label">작업</div>
+            <div class="hub-section-label-wrap">
+              <img
+                class="hub-section-icon"
+                src="https://i.ibb.co/2YWKJ3QP/Asset-6.png"
+                alt=""
+              />
+              <div class="hub-section-label">작업</div>
+            </div>
             <div class="hub-section-btns">
               <button
                 type="button"
@@ -1805,7 +1866,14 @@
             </div>
           </div>
           <div class="hub-work-section">
-            <div class="hub-section-label">정비</div>
+            <div class="hub-section-label-wrap">
+              <img
+                class="hub-section-icon"
+                src="https://i.ibb.co/tPTCzt7t/Asset-9.png"
+                alt=""
+              />
+              <div class="hub-section-label">정비</div>
+            </div>
             <div class="hub-section-btns">
               <button
                 type="button"
