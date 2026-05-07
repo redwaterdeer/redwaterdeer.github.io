@@ -7,6 +7,48 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>완벽한 관리자 앱</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="/apple-icon-114x114.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="/apple-icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="/apple-icon-144x144.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="/apple-icon-152x152.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/apple-icon-180x180.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/android-icon-192x192.png"
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
+    <meta name="theme-color" content="#ffffff" />
     <style>
       @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap");
@@ -281,6 +323,11 @@
         flex: 1;
         touch-action: manipulation;
       }
+      #unit-exp-save-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
       .btn-home {
         width: 100%;
         min-height: var(--tap-min);
@@ -369,14 +416,15 @@
         flex-shrink: 0;
       }
       .hub-stack-btn {
-        min-width: 118px;
-        min-height: var(--tap-min);
-        padding: 12px 14px;
+        width: 150px;
+        height: 48px;
+        padding: 0 12px;
         background: #dee2e6;
         border: 1px solid #182b1a;
         border-radius: 8px;
         font-weight: 700;
         font-size: 15px;
+        line-height: 1.2;
         cursor: pointer;
         touch-action: manipulation;
       }
@@ -1861,7 +1909,7 @@
                 class="hub-stack-btn"
                 onclick="goToCalendarView()"
               >
-                작업 일정
+                일정 조회 및 수정
               </button>
             </div>
           </div>
@@ -1887,7 +1935,7 @@
                 class="hub-stack-btn"
                 onclick="goToMaintenanceCalendarView()"
               >
-                정비 일정
+                일정 조회 및 수정
               </button>
             </div>
           </div>
@@ -1917,20 +1965,6 @@
         <div class="screen-number">5</div>
         <div class="screen-content page4-reg-screen">
           <h2 class="reg-title">일정 등록</h2>
-          <div class="field-label">현장명</div>
-          <input type="text" id="in-site" class="field-input" />
-          <div class="field-label">담당자 연락처</div>
-          <input
-            type="tel"
-            id="in-contact"
-            class="field-input"
-            maxlength="13"
-            inputmode="numeric"
-            oninput="formatKoreanMobile(this)"
-            placeholder="010-0000-0000"
-          />
-          <div class="field-label">주소</div>
-          <input type="text" id="in-addr" class="field-input" />
           <div class="field-label">진입일자</div>
           <div class="flex-row">
             <select id="in-year" class="sel-year"></select
@@ -1946,6 +1980,20 @@
             <select id="in-hour" class="sel-hour"></select>
             <select id="in-min" class="sel-min"></select>
           </div>
+          <div class="field-label">현장명</div>
+          <input type="text" id="in-site" class="field-input" />
+          <div class="field-label">담당자 연락처</div>
+          <input
+            type="tel"
+            id="in-contact"
+            class="field-input"
+            maxlength="13"
+            inputmode="numeric"
+            oninput="formatKoreanMobile(this)"
+            placeholder="010-0000-0000"
+          />
+          <div class="field-label">주소</div>
+          <input type="text" id="in-addr" class="field-input" />
           <div class="field-label">금액</div>
           <select id="in-amount" class="field-input"></select>
           <div class="field-label">이슈사항</div>
@@ -2060,7 +2108,7 @@
                   <th colspan="2">진입</th>
                   <th rowspan="2">현장명</th>
                   <th rowspan="2">매출</th>
-                  <th rowspan="2">상세</th>
+                  <th rowspan="2">상세<br />(수정)</th>
                 </tr>
                 <tr>
                   <th style="border-top: none">일자</th>
@@ -2518,7 +2566,7 @@
       </div>
 
       <div id="page12" class="app-container" style="display: none">
-        <div class="screen-number">13</div>
+        <div class="screen-number" id="unit-exp-page-num">17</div>
         <div class="screen-content">
           <div class="page9-top-row">
             <h2 class="page-unit-title">현장단위 비용 내역</h2>
@@ -2589,7 +2637,7 @@
                   <th>유형</th>
                   <th>비용</th>
                   <th>내용</th>
-                  <th>삭제</th>
+                  <th id="unit-exp-delete-head">삭제</th>
                 </tr>
               </thead>
               <tbody id="unit-exp-list-body"></tbody>
@@ -2600,8 +2648,10 @@
             class="prev-home-spacing"
             style="display: flex; gap: 10px; margin-top: 15px"
           >
-            <button class="btn-gray" onclick="saveUnitExpense()">저장</button>
-            <button class="btn-gray" onclick="showPage('page11')">이전</button>
+            <button id="unit-exp-save-btn" class="btn-gray" onclick="saveUnitExpense()">
+              저장
+            </button>
+            <button class="btn-gray" onclick="handleUnitExpensePrev()">이전</button>
           </div>
 
           <div class="bottom-area">
@@ -2677,14 +2727,18 @@
         <div class="screen-number">15</div>
         <div class="screen-content page4-reg-screen">
           <h2 class="reg-title">정비 일정 등록</h2>
-          <div class="field-label">정비내용</div>
-          <input type="text" id="mreg-site" class="field-input" />
           <div class="field-label">정비일자</div>
           <div class="flex-row">
             <select id="mreg-year" class="sel-year"></select
             ><select id="mreg-month" class="sel-month"></select
             ><select id="mreg-day" class="sel-day"></select>
           </div>
+          <div class="field-label">유형</div>
+          <select id="mreg-site" class="field-input">
+            <option value="유류">주유</option>
+            <option value="관리">정비</option>
+            <option value="기타">기타</option>
+          </select>
           <div class="field-label">비용</div>
           <select id="mreg-amount" class="field-input"></select>
           <div class="field-label">내용</div>
@@ -2832,6 +2886,7 @@
       let currentUser = null;
       let currentEditId = null;
       let expenseDraftRows = [];
+      let unitExpenseReadOnly = false;
       let regPhotoDataUrls = [];
 
       const REGION_DATA = (function () {
@@ -3269,7 +3324,7 @@
         const site = document.getElementById("mreg-site");
         const amt = document.getElementById("mreg-amount");
         const content = document.getElementById("mreg-content");
-        if (site) site.value = "";
+        if (site) site.value = "관리";
         if (amt) amt.value = "";
         if (content) content.value = "";
       }
@@ -3286,17 +3341,17 @@
         );
         const content = document.getElementById("mreg-content").value.trim();
         if (!site || !dayNum || amountNum <= 0)
-          return alert("정비내용, 정비일자, 비용을 입력하세요.");
+          return alert("유형, 정비일자, 비용을 입력하세요.");
         const entry = {
           id: Date.now(),
           author: currentUser.id,
           year: String(year),
           month: String(month).padStart(2, "0"),
           day: `${dayNum}일`,
-          category: "관리",
+          category: site,
           amount: formatWon(amountNum),
-          content: content || site,
-          site: site,
+          content: content || expenseCategoryLabel(site),
+          site: expenseCategoryLabel(site),
           checked: false,
         };
         const all = getExpenses();
@@ -3474,6 +3529,10 @@
 
       function handleLogout() {
         currentUser = null;
+        const loginIdEl = document.getElementById("login-id");
+        const loginPwEl = document.getElementById("login-pw");
+        if (loginIdEl) loginIdEl.value = "";
+        if (loginPwEl) loginPwEl.value = "";
         showPage("page1");
       }
 
@@ -3972,11 +4031,7 @@
           if (dayData.length > 0) {
             td.className = "has-data";
             td.innerHTML = `${d}<span class="count">${dayData.length}건</span>`;
-            td.onclick = () => {
-              document.getElementById("mx-view-type").value = "list";
-              document.getElementById("mx-filter-day").value = dayStr;
-              toggleMxView();
-            };
+            td.onclick = () => goToUnitExpense(year, month, false, "17");
           } else td.innerText = d;
           row.appendChild(td);
         }
@@ -4056,6 +4111,12 @@
         clearRegPhotos();
         alert("등록 완료!");
         showPage("page14");
+      }
+
+      function handleUnitExpensePrev() {
+        const pageNum = document.getElementById("unit-exp-page-num")?.innerText;
+        if (String(pageNum).trim() === "17") showPage("page17");
+        else showPage("page11");
       }
 
       function renderSchedule() {
@@ -4381,7 +4442,7 @@
           const monthStr = String(idx + 1).padStart(2, "0");
           const barWrapper = document.createElement("div");
           barWrapper.className = "chart-bar-wrapper";
-          barWrapper.onclick = () => goToUnitExpense(year, monthStr);
+          barWrapper.onclick = () => goToUnitExpense(year, monthStr, true, "13");
           const f = monthlyFuel[idx],
             m = monthlyMng[idx],
             et = monthlyEtc[idx];
@@ -4392,7 +4453,7 @@
             a > 0 ? `${formatWon(a)} (${c}건)` : "";
           const listRow = document.createElement("tr");
           listRow.className = "expense-monthly-row";
-          listRow.onclick = () => goToUnitExpense(year, monthStr);
+          listRow.onclick = () => goToUnitExpense(year, monthStr, true, "13");
           listRow.innerHTML = `<td>${idx + 1}월</td><td class="expense-monthly-num expense-td-fuel">${fmtAmtCnt(f, monthlyFuelCnt[idx])}</td><td class="expense-monthly-num expense-td-mng">${fmtAmtCnt(m, monthlyMngCnt[idx])}</td><td class="expense-monthly-num expense-td-etc">${fmtAmtCnt(et, monthlyEtcCnt[idx])}</td>`;
           expenseList.appendChild(listRow);
         });
@@ -4664,7 +4725,16 @@
         window.location.href = `tel:${callNumber}`;
       }
 
-      function goToUnitExpense(year, month) {
+      function goToUnitExpense(year, month, readOnly = true, pageNumText = "13") {
+        unitExpenseReadOnly = !!readOnly;
+        const pageNumEl = document.getElementById("unit-exp-page-num");
+        const delHeadEl = document.getElementById("unit-exp-delete-head");
+        const saveBtnEl = document.getElementById("unit-exp-save-btn");
+        if (pageNumEl) pageNumEl.innerText = pageNumText;
+        if (delHeadEl)
+          delHeadEl.style.display = unitExpenseReadOnly ? "none" : "table-cell";
+        if (saveBtnEl)
+          saveBtnEl.style.display = unitExpenseReadOnly ? "none" : "inline-flex";
         document.getElementById("unit-exp-year").value = year;
         document.getElementById("unit-exp-month").value = month;
         renderUnitExpense();
@@ -4717,9 +4787,23 @@
         const body = document.getElementById("unit-exp-list-body");
         body.innerHTML = "";
 
-        expenseDraftRows.forEach((r, i) => {
+        const rows = unitExpenseReadOnly
+          ? expenseDraftRows.filter((r) => !isDraftRowEmpty(r))
+          : expenseDraftRows;
+
+        rows.forEach((r, i) => {
           const tr = document.createElement("tr");
-          tr.innerHTML = `
+          if (unitExpenseReadOnly) {
+            const dayText = parseExpenseDay(r.day);
+            tr.innerHTML = `
+        <td>${i + 1}</td>
+        <td>${dayText ? dayText + "일" : ""}</td>
+        <td>${expenseCategoryLabel(r.category)}</td>
+        <td>${formatWon(parseAmount(r.amount))}</td>
+        <td>${r.content || ""}</td>
+      `;
+          } else {
+            tr.innerHTML = `
         <td>${i + 1}</td>
         <td>
           <select class="exp-select" onchange="onExpenseInput(${i}, 'day', this.value)">
@@ -4741,6 +4825,7 @@
         <td><input class="exp-input" value="${r.content || ""}" oninput="onExpenseInput(${i}, 'content', this.value)"></td>
         <td><input type="checkbox" ${r.checked ? "checked" : ""} onchange="onExpenseInput(${i}, 'checked', this.checked)"></td>
       `;
+          }
           body.appendChild(tr);
         });
 
