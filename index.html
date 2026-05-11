@@ -214,7 +214,6 @@
         height: auto;
         flex-shrink: 0;
         object-fit: contain;
-        mix-blend-mode: multiply;
         -webkit-user-select: none;
         user-select: none;
       }
@@ -238,6 +237,24 @@
       #page1 .header .sub-text {
         margin-top: 0;
       }
+      #page1 .login-remember-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 10px 0 14px;
+        font-size: 13px;
+        color: #182b1a;
+      }
+      #page1 .login-remember-row input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        accent-color: #182b1a;
+      }
+      #page1 .login-remember-row label {
+        cursor: pointer;
+        font-weight: 500;
+      }
       #page3 .app-header-banner-img,
       #page14 .app-header-banner-img {
         display: block;
@@ -248,8 +265,7 @@
         margin: 0 auto;
         margin-bottom: clamp(16px, 4.5vw, 40px);
         object-fit: contain;
-        background: #f2fcf2;
-        mix-blend-mode: multiply;
+        background: transparent;
         -webkit-user-select: none;
         user-select: none;
       }
@@ -273,10 +289,10 @@
         pointer-events: none;
         border: 0;
         display: block;
-        background: #f2fcf2;
+        background: transparent;
         max-width: 100%;
         width: min(100%, 320px);
-        height: 72px;
+        height: auto;
         visibility: hidden;
         opacity: 0;
       }
@@ -709,6 +725,43 @@
       #page4 #in-amount,
       #page16 #mreg-amount {
         min-height: var(--tap-min);
+      }
+
+      #page4 .in-site-field-wrap {
+        position: relative;
+        width: 100%;
+      }
+      #page4 .in-site-picker {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: calc(100% + 2px);
+        z-index: 25;
+        max-height: min(240px, 45vh);
+        overflow-y: auto;
+        background: #fff;
+        border: 1px solid #182b1a;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      }
+      #page4 .in-site-picker-item {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 10px 12px;
+        font-size: 14px;
+        color: #182b1a;
+        background: #fff;
+        border: none;
+        border-bottom: 1px solid #e9ecef;
+        cursor: pointer;
+        font-family: var(--font-ui);
+      }
+      #page4 .in-site-picker-item:last-child {
+        border-bottom: none;
+      }
+      #page4 .in-site-picker-item:active {
+        background: #f1f3f5;
       }
 
       /* 16번 화면: 일/비용 축소 + 가로 스크롤 제거 */
@@ -1167,6 +1220,148 @@
         line-height: 1.15;
         width: 100%;
         text-align: center;
+      }
+      .page15-stats-layout #stats-chart-area.stats-chart-area--monthly {
+        border-bottom: none;
+        position: relative;
+        gap: 0;
+      }
+      .page15-stats-layout
+        #stats-chart-area.stats-chart-area--monthly::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 1.42rem;
+        height: 1px;
+        background: #182b1a;
+        pointer-events: none;
+        z-index: 2;
+      }
+      .page15-stats-layout
+        #stats-chart-area.stats-chart-area--monthly
+        .chart-bar {
+        border-bottom: none;
+      }
+      .page15-stats-layout
+        #stats-chart-area.stats-chart-area--monthly
+        .chart-label {
+        border-top: none;
+        padding-top: 4px;
+        margin-top: 6px;
+      }
+      .page15-stats-layout .sales-chart-container.stats-chart-site-labels {
+        overflow-x: visible;
+      }
+      .page15-stats-layout .chart-row-wrap.stats-chart-row--site {
+        height: 200px;
+        min-height: 200px;
+      }
+      .page15-stats-layout #stats-chart-area.stats-chart-area--site {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+      .page15-stats-layout
+        #stats-chart-area.stats-chart-area--site
+        .stats-site-chart-stack {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+      }
+      .page15-stats-layout
+        #stats-chart-area.stats-chart-area--site
+        .stats-site-chart-bars-row {
+        display: flex;
+        flex-direction: row;
+        flex: 1 1 auto;
+        min-height: 0;
+        align-items: flex-end;
+        gap: 1px;
+        border-bottom: 2px solid #182b1a;
+        box-sizing: border-box;
+      }
+      .page15-stats-layout
+        #stats-chart-area.stats-chart-area--site
+        .stats-site-chart-bars-row
+        .chart-bar-wrapper {
+        flex: 1 1 0;
+        min-width: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        overflow: visible;
+        cursor: default;
+      }
+      .page15-stats-layout
+        #stats-chart-area.stats-chart-area--site
+        .stats-site-chart-labels-row {
+        display: flex;
+        flex-direction: row;
+        flex: 0 0 auto;
+        gap: 1px;
+        width: 100%;
+        padding-top: 8px;
+        box-sizing: border-box;
+      }
+      .page15-stats-layout .stats-site-chart-label-cell {
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+      .page15-stats-layout .stats-site-chart-label {
+        white-space: nowrap;
+        overflow: visible;
+        text-overflow: clip;
+        max-width: none;
+        width: max-content;
+        margin-top: 0;
+        font-size: 7px;
+        letter-spacing: -0.05em;
+        line-height: 1.05;
+        transform: rotate(-45deg);
+        transform-origin: top center;
+      }
+      .page15-stats-layout .stats-th-site-col {
+        background: #cbcbcb;
+        color: #182b1a;
+        font-weight: 800;
+        text-align: center;
+        padding: 8px 4px;
+        min-width: 56px;
+      }
+      .page15-stats-layout .stats-td-site-name {
+        text-align: left;
+        font-weight: 700;
+        background: #f9f9f9;
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #182b1a;
+      }
+      .page15-stats-layout .stats-th-no {
+        background: #cbcbcb;
+        color: #182b1a;
+        font-weight: 800;
+        text-align: center;
+        padding: 8px 4px;
+        width: 40px;
+        min-width: 40px;
+        max-width: 48px;
+      }
+      .page15-stats-layout .stats-td-no {
+        text-align: center;
+        font-weight: 800;
+        background: #f9f9f9;
+        color: #182b1a;
       }
 
       /* 9·12·14번: 차트·본문 가로 스크롤 방지 */
@@ -1688,7 +1883,7 @@
           <div class="page1-top-banner-wrap">
             <img
               class="page1-top-banner"
-              src="https://i.ibb.co/Xrm5nLpS/backcolor.jpg"
+              src="https://i.ibb.co/9mPYtxJB/Asset-2.png"
               alt=""
             />
           </div>
@@ -1697,16 +1892,14 @@
             role="img"
             aria-label="완벽한 관리자"
           >
-            <object
+            <img
               id="page1-pdf-final"
               class="page1-pdf-final"
-              type="application/pdf"
-              data="../../%EC%B5%9C%EC%A2%85%20%EB%A1%9C%EA%B3%A0.pdf"
-              width="320"
-              height="72"
+              src="https://i.ibb.co/9mPYtxJB/Asset-2.png"
+              alt=""
               onload="handlePage1PdfLoad(true)"
               onerror="handlePage1PdfLoad(false)"
-            ></object>
+            />
           </div>
           <header class="header">
             <p class="sub-text">Perfect Manager</p>
@@ -1716,6 +1909,10 @@
           </div>
           <div class="input-row">
             <label>PW</label><input type="password" id="login-pw" />
+          </div>
+          <div class="login-remember-row">
+            <input type="checkbox" id="login-remember-id" />
+            <label for="login-remember-id">간편로그인 정보 저정</label>
           </div>
           <div style="display: flex; gap: 10px">
             <button class="btn-gray" onclick="handleLogin()">로그인</button>
@@ -1825,7 +2022,7 @@
           <header class="header">
             <img
               class="app-header-banner-img"
-              src="https://i.ibb.co/Xrm5nLpS/backcolor.jpg"
+              src="https://i.ibb.co/9mPYtxJB/Asset-2.png"
               alt=""
             />
             <p class="sub-text">Perfect Manager</p>
@@ -1881,7 +2078,7 @@
           <header class="header">
             <img
               class="app-header-banner-img"
-              src="https://i.ibb.co/Xrm5nLpS/backcolor.jpg"
+              src="https://i.ibb.co/9mPYtxJB/Asset-2.png"
               alt=""
             />
             <p class="sub-text">Perfect Manager</p>
@@ -1981,7 +2178,24 @@
             <select id="in-min" class="sel-min"></select>
           </div>
           <div class="field-label">현장명</div>
-          <input type="text" id="in-site" class="field-input" />
+          <div class="in-site-field-wrap">
+            <input
+              type="text"
+              id="in-site"
+              class="field-input"
+              autocomplete="off"
+              onchange="handleInSiteFieldChange()"
+              onfocus="showInSitePicker()"
+              onblur="handleInSitePickerBlur()"
+            />
+            <div
+              id="in-site-picker"
+              class="in-site-picker"
+              role="listbox"
+              hidden
+              aria-hidden="true"
+            ></div>
+          </div>
           <div class="field-label">담당자 연락처</div>
           <input
             type="tel"
@@ -2681,6 +2895,7 @@
               <select id="stats-mode" onchange="renderStatsPage()">
                 <option value="net">순수익</option>
                 <option value="sites">현장수</option>
+                <option value="siteTop">현장명</option>
               </select>
             </div>
           </header>
@@ -2883,11 +3098,14 @@
       const MASTER_ID = "redwaterdeer";
       const MASTER_PW = "10qp29wo!Q";
       const MASTER_EXPORT_LS_KEY = "pm_master_export_hint";
+      const LOGIN_REMEMBER_LS_KEY = "pm_login_remember_id";
+      const LOGIN_SAVED_ID_LS_KEY = "pm_saved_login_id";
       let currentUser = null;
       let currentEditId = null;
       let expenseDraftRows = [];
       let unitExpenseReadOnly = false;
       let regPhotoDataUrls = [];
+      let inSitePickerCloseTimer = 0;
 
       const REGION_DATA = (function () {
         const R = (s) => s.split("|");
@@ -3012,6 +3230,22 @@
         const inp = document.getElementById("reg-photo-input");
         if (inp) inp.value = "";
         updateRegPhotoCount();
+      }
+
+      function resetPage4RegFormInputs() {
+        window.clearTimeout(inSitePickerCloseTimer);
+        inSitePickerCloseTimer = 0;
+        hideInSitePicker();
+        const site = document.getElementById("in-site");
+        const cont = document.getElementById("in-contact");
+        const addr = document.getElementById("in-addr");
+        const amt = document.getElementById("in-amount");
+        const issue = document.getElementById("in-issue");
+        if (site) site.value = "";
+        if (cont) cont.value = "";
+        if (addr) addr.value = "";
+        if (amt) amt.value = "";
+        if (issue) issue.value = "";
       }
 
       function shrinkImageToDataUrl(file, maxW, quality, done) {
@@ -3187,6 +3421,105 @@
       function setData(v) {
         localStorage.setItem("mydata", JSON.stringify(v));
       }
+
+      function getMergedSiteRows() {
+        const map = new Map();
+        let rows = getData();
+        if (!currentUser) rows = [];
+        else if (!currentUser.isMaster)
+          rows = rows.filter(
+            (r) => String(r.author || "") === String(currentUser.id),
+          );
+        rows.forEach((r) => {
+          const s = String(r.site || "").trim();
+          if (!s) return;
+          map.set(s, {
+            site: s,
+            contact: String(r.contact || "").replace(/\D/g, "").slice(0, 11),
+            addr: String(r.addr || "").trim(),
+          });
+        });
+        return Array.from(map.values());
+      }
+
+      function findMergedSiteRow(siteName) {
+        const v = String(siteName || "").trim();
+        if (!v) return null;
+        return getMergedSiteRows().find((r) => r.site === v) || null;
+      }
+
+      function hideInSitePicker() {
+        const picker = document.getElementById("in-site-picker");
+        if (picker) {
+          picker.hidden = true;
+          picker.setAttribute("aria-hidden", "true");
+        }
+      }
+
+      function showInSitePicker() {
+        window.clearTimeout(inSitePickerCloseTimer);
+        inSitePickerCloseTimer = 0;
+        refreshInSiteDatalist();
+        const picker = document.getElementById("in-site-picker");
+        if (!picker) return;
+        if (picker.childElementCount === 0) {
+          picker.hidden = true;
+          return;
+        }
+        picker.hidden = false;
+        picker.setAttribute("aria-hidden", "false");
+      }
+
+      function handleInSitePickerBlur() {
+        handleInSiteFieldChange();
+        window.clearTimeout(inSitePickerCloseTimer);
+        inSitePickerCloseTimer = window.setTimeout(hideInSitePicker, 200);
+      }
+
+      function refreshInSiteDatalist() {
+        const picker = document.getElementById("in-site-picker");
+        if (!picker) return;
+        picker.innerHTML = "";
+        const seen = new Set();
+        getMergedSiteRows()
+          .sort((a, b) => a.site.localeCompare(b.site, "ko"))
+          .forEach(({ site }) => {
+            if (!site || seen.has(site)) return;
+            seen.add(site);
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "in-site-picker-item";
+            btn.setAttribute("role", "option");
+            btn.textContent = site;
+            btn.addEventListener("mousedown", (e) => {
+              e.preventDefault();
+              const inp = document.getElementById("in-site");
+              if (inp) inp.value = site;
+              window.clearTimeout(inSitePickerCloseTimer);
+              inSitePickerCloseTimer = 0;
+              hideInSitePicker();
+              handleInSiteFieldChange();
+            });
+            picker.appendChild(btn);
+          });
+        picker.hidden = true;
+        picker.setAttribute("aria-hidden", "true");
+      }
+
+      function handleInSiteFieldChange() {
+        const siteEl = document.getElementById("in-site");
+        const cEl = document.getElementById("in-contact");
+        const aEl = document.getElementById("in-addr");
+        if (!siteEl || !cEl || !aEl) return;
+        const row = findMergedSiteRow(siteEl.value);
+        if (!row) return;
+        if (row.contact) {
+          cEl.value = row.contact;
+          formatKoreanMobile(cEl);
+        } else cEl.value = "";
+        aEl.value = row.addr || "";
+      }
+
       function getExpenses() {
         return JSON.parse(localStorage.getItem("myexpenses") || "[]");
       }
@@ -3293,7 +3626,25 @@
         updateMxFilterDays();
         initRegionControlsOnce();
         syncMasterExportUiVisibility();
+        applyRememberedLoginIdUi();
+        refreshInSiteDatalist();
       };
+
+      function applyRememberedLoginIdUi() {
+        const idInput = document.getElementById("login-id");
+        const chk = document.getElementById("login-remember-id");
+        if (!idInput || !chk) return;
+        let remember = false;
+        let saved = "";
+        try {
+          remember = localStorage.getItem(LOGIN_REMEMBER_LS_KEY) === "1";
+          saved = String(localStorage.getItem(LOGIN_SAVED_ID_LS_KEY) || "");
+        } catch (e) {
+          return;
+        }
+        chk.checked = remember;
+        if (remember && saved) idInput.value = saved;
+      }
 
       function showPage(id) {
         document
@@ -3312,7 +3663,12 @@
           updateMxFilterDays();
           toggleMxView();
         }
-        if (id === "page4") clearRegPhotos();
+        if (id === "page4") {
+          clearRegPhotos();
+          resetPage4RegFormInputs();
+          refreshInSiteDatalist();
+        }
+        if (id === "page1") applyRememberedLoginIdUi();
         syncMasterExportUiVisibility();
       }
 
@@ -3395,6 +3751,16 @@
 
         if (!user) return alert("아이디 또는 비밀번호를 확인하세요.");
         currentUser = user;
+        const rememberEl = document.getElementById("login-remember-id");
+        try {
+          if (rememberEl && rememberEl.checked) {
+            localStorage.setItem(LOGIN_REMEMBER_LS_KEY, "1");
+            localStorage.setItem(LOGIN_SAVED_ID_LS_KEY, id);
+          } else {
+            localStorage.removeItem(LOGIN_REMEMBER_LS_KEY);
+            localStorage.removeItem(LOGIN_SAVED_ID_LS_KEY);
+          }
+        } catch (e) {}
         try {
           localStorage.setItem(
             MASTER_EXPORT_LS_KEY,
@@ -3531,8 +3897,22 @@
         currentUser = null;
         const loginIdEl = document.getElementById("login-id");
         const loginPwEl = document.getElementById("login-pw");
-        if (loginIdEl) loginIdEl.value = "";
         if (loginPwEl) loginPwEl.value = "";
+        let remember = false;
+        try {
+          remember = localStorage.getItem(LOGIN_REMEMBER_LS_KEY) === "1";
+        } catch (e) {}
+        if (loginIdEl) {
+          if (remember) {
+            try {
+              loginIdEl.value = String(
+                localStorage.getItem(LOGIN_SAVED_ID_LS_KEY) || "",
+              );
+            } catch (e) {
+              loginIdEl.value = "";
+            }
+          } else loginIdEl.value = "";
+        }
         showPage("page1");
       }
 
@@ -3972,8 +4352,11 @@
         const day = document.getElementById("mx-filter-day").value;
 
         let expenses = getExpenses();
-        if (currentUser && !currentUser.isMaster) {
-          expenses = expenses.filter((e) => e.author === currentUser.id);
+        if (!currentUser) expenses = [];
+        else if (!currentUser.isMaster) {
+          expenses = expenses.filter(
+            (e) => String(e.author || "") === String(currentUser.id),
+          );
         }
 
         if (type === "list") {
@@ -4108,6 +4491,7 @@
         const db = getData();
         db.push(data);
         setData(db);
+        refreshInSiteDatalist();
         clearRegPhotos();
         alert("등록 완료!");
         showPage("page14");
@@ -4126,8 +4510,11 @@
         const day = document.getElementById("filter-day").value;
 
         let data = getData();
-        if (currentUser && !currentUser.isMaster)
-          data = data.filter((r) => r.author === currentUser.id);
+        if (!currentUser) data = [];
+        else if (!currentUser.isMaster)
+          data = data.filter(
+            (r) => String(r.author || "") === String(currentUser.id),
+          );
 
         if (type === "list") {
           const list = document.getElementById("schedule-list");
@@ -4194,6 +4581,12 @@
         const db = getData();
         const r = db.find((x) => x.id === id);
         if (!r) return;
+        if (
+          currentUser &&
+          !currentUser.isMaster &&
+          String(r.author || "") !== String(currentUser.id)
+        )
+          return alert("권한이 없습니다.");
         currentEditId = id;
         document.getElementById("det-site").value = r.site;
         const dc = document.getElementById("det-contact");
@@ -4218,6 +4611,12 @@
         const db = getData();
         const idx = db.findIndex((x) => x.id === currentEditId);
         if (idx < 0) return;
+        if (
+          currentUser &&
+          !currentUser.isMaster &&
+          String(db[idx].author || "") !== String(currentUser.id)
+        )
+          return alert("권한이 없습니다.");
         const detContact = document
           .getElementById("det-contact")
           .value.trim()
@@ -4248,6 +4647,14 @@
       function deleteRecord() {
         if (!confirm("삭제하시겠습니까?")) return;
         let db = getData();
+        const victim = db.find((x) => x.id === currentEditId);
+        if (!victim) return;
+        if (
+          currentUser &&
+          !currentUser.isMaster &&
+          String(victim.author || "") !== String(currentUser.id)
+        )
+          return alert("권한이 없습니다.");
         db = db.filter((x) => x.id !== currentEditId);
         setData(db);
         showPage("page6");
@@ -4268,8 +4675,11 @@
         const salesTotal = document.getElementById("sales-total");
 
         let data = getData();
-        if (currentUser && !currentUser.isMaster)
-          data = data.filter((r) => r.author === currentUser.id);
+        if (!currentUser) data = [];
+        else if (!currentUser.isMaster)
+          data = data.filter(
+            (r) => String(r.author || "") === String(currentUser.id),
+          );
 
         const monthlyWan = Array(12).fill(0);
         const monthlyMi = Array(12).fill(0);
@@ -4383,8 +4793,11 @@
         const expenseTotal = document.getElementById("expense-total");
 
         let expenses = getExpenses();
-        if (currentUser && !currentUser.isMaster) {
-          expenses = expenses.filter((e) => e.author === currentUser.id);
+        if (!currentUser) expenses = [];
+        else if (!currentUser.isMaster) {
+          expenses = expenses.filter(
+            (e) => String(e.author || "") === String(currentUser.id),
+          );
         }
 
         const monthlyFuel = Array(12).fill(0);
@@ -4472,15 +4885,29 @@
         const theadRow = document.getElementById("stats-thead-row");
         if (!chartArea || !listEl || !totalBox || !theadRow) return;
 
+        const statsChartWrap = chartArea.closest(".sales-chart-container");
+        const statsChartRow = chartArea.closest(".chart-row-wrap");
+        if (statsChartWrap) statsChartWrap.classList.remove("stats-chart-site-labels");
+        if (statsChartRow) statsChartRow.classList.remove("stats-chart-row--site");
+        chartArea.classList.remove("stats-chart-area--site");
+        chartArea.classList.remove("stats-chart-area--monthly");
+
         let data = getData();
-        if (currentUser && !currentUser.isMaster)
-          data = data.filter((r) => r.author === currentUser.id);
+        if (!currentUser) data = [];
+        else if (!currentUser.isMaster)
+          data = data.filter(
+            (r) => String(r.author || "") === String(currentUser.id),
+          );
         let expenses = getExpenses();
-        if (currentUser && !currentUser.isMaster) {
-          expenses = expenses.filter((e) => e.author === currentUser.id);
+        if (!currentUser) expenses = [];
+        else if (!currentUser.isMaster) {
+          expenses = expenses.filter(
+            (e) => String(e.author || "") === String(currentUser.id),
+          );
         }
 
         if (mode === "net") {
+          chartArea.classList.add("stats-chart-area--monthly");
           const monthlyWan = Array(12).fill(0);
           const monthlyMi = Array(12).fill(0);
           const monthlySalesCount = Array(12).fill(0);
@@ -4571,7 +4998,107 @@
           });
 
           totalBox.innerText = `연 순수익 : ${Number(yearNet || 0).toLocaleString()}원 (${yearSalesCount}건)`;
+        } else if (mode === "siteTop") {
+          chartArea.classList.add("stats-chart-area--site");
+          if (statsChartWrap) statsChartWrap.classList.add("stats-chart-site-labels");
+          if (statsChartRow) statsChartRow.classList.add("stats-chart-row--site");
+          const siteCounts = new Map();
+          let yearSched = 0;
+          data.forEach((r) => {
+            if (r.year != year) return;
+            yearSched++;
+            const s = String(r.site || "").trim();
+            if (!s) return;
+            siteCounts.set(s, (siteCounts.get(s) || 0) + 1);
+          });
+          const ranked = Array.from(siteCounts.entries())
+            .map(([site, cnt]) => ({ site, cnt }))
+            .sort(
+              (a, b) =>
+                b.cnt - a.cnt || a.site.localeCompare(b.site, "ko"),
+            );
+          const top = ranked.slice(0, 10);
+          const maxVal = Math.max(...top.map((x) => x.cnt), 1);
+
+          if (axisEl) {
+            const nTicks = 5;
+            const labels = [];
+            for (let i = nTicks - 1; i >= 0; i--) {
+              const raw = Math.round((maxVal * i) / (nTicks - 1));
+              labels.push(`<span>${formatChartAxisInt(raw)}</span>`);
+            }
+            axisEl.innerHTML = labels.join("");
+          }
+          if (legendEl) {
+            legendEl.innerHTML = `<span class="chart-legend-item"><span class="legend-dot" style="background:#64748b;border:1px solid #182b1a"></span>등록 건수</span>`;
+            legendEl.style.display = "flex";
+          }
+
+          theadRow.innerHTML =
+            '<th class="stats-th-no">NO.</th><th class="stats-th-site-col">현장명</th><th class="stats-th-sites">등록</th>';
+          chartArea.innerHTML = "";
+          listEl.innerHTML = "";
+
+          if (top.length === 0) {
+            const row = document.createElement("tr");
+            row.innerHTML =
+              '<td colspan="3" style="text-align:center;padding:10px 6px">해당 연도 등록된 현장이 없습니다.</td>';
+            listEl.appendChild(row);
+          } else {
+            const stack = document.createElement("div");
+            stack.className = "stats-site-chart-stack";
+            const barsRow = document.createElement("div");
+            barsRow.className = "stats-site-chart-bars-row";
+            const labelsRow = document.createElement("div");
+            labelsRow.className = "stats-site-chart-labels-row";
+            top.forEach(({ site, cnt }, i) => {
+              const n = i + 1;
+              const barWrapper = document.createElement("div");
+              barWrapper.className = "chart-bar-wrapper";
+              const barHtml =
+                cnt <= 0
+                  ? `<div class="chart-bar" style="height:2px;background:#f1f3f5"></div>`
+                  : `<div class="chart-bar" style="height:${(cnt / maxVal) * 100}%;background:#64748b;border:1px solid #182b1a"></div>`;
+              barWrapper.innerHTML = barHtml;
+              barsRow.appendChild(barWrapper);
+
+              const labCell = document.createElement("div");
+              labCell.className = "stats-site-chart-label-cell";
+              const lab = document.createElement("div");
+              lab.className = "chart-label stats-site-chart-label";
+              lab.textContent = `${n}. ${site}`;
+              lab.title = site;
+              labCell.appendChild(lab);
+              labelsRow.appendChild(labCell);
+
+              const tr = document.createElement("tr");
+              const tdNo = document.createElement("td");
+              tdNo.className = "stats-td-no";
+              tdNo.textContent = String(n);
+              const tdSite = document.createElement("td");
+              tdSite.className = "stats-td-site-name";
+              tdSite.textContent = site;
+              tdSite.title = site;
+              const tdCnt = document.createElement("td");
+              tdCnt.className = "stats-td-sites";
+              tdCnt.textContent = cnt + "건";
+              tr.appendChild(tdNo);
+              tr.appendChild(tdSite);
+              tr.appendChild(tdCnt);
+              listEl.appendChild(tr);
+            });
+            stack.appendChild(barsRow);
+            stack.appendChild(labelsRow);
+            chartArea.appendChild(stack);
+          }
+          const shownSum = top.reduce((a, b) => a + b.cnt, 0);
+          const pct =
+            yearSched > 0
+              ? Math.min(100, Math.round((shownSum / yearSched) * 100))
+              : 0;
+          totalBox.innerText = `위 현장은 전체의 ${pct}%입니다`;
         } else {
+          chartArea.classList.add("stats-chart-area--monthly");
           theadRow.innerHTML =
             '<th class="stats-monthly-th-month"></th><th class="stats-th-sites">현장수</th>';
 
@@ -4628,6 +5155,12 @@
         const data = getData();
         const idx = data.findIndex((r) => r.id === id);
         if (idx < 0) return;
+        if (
+          currentUser &&
+          !currentUser.isMaster &&
+          String(data[idx].author || "") !== String(currentUser.id)
+        )
+          return alert("권한이 없습니다.");
         data[idx].status = value;
         setData(data);
         calculateUnitSummary();
@@ -4639,8 +5172,11 @@
         const listBody = document.getElementById("unit-list-body");
 
         let data = getData();
-        if (currentUser && !currentUser.isMaster)
-          data = data.filter((r) => r.author === currentUser.id);
+        if (!currentUser) data = [];
+        else if (!currentUser.isMaster)
+          data = data.filter(
+            (r) => String(r.author || "") === String(currentUser.id),
+          );
         const filtered = data.filter((r) => r.year == year && r.month == month);
 
         listBody.innerHTML = filtered.length
@@ -4700,6 +5236,12 @@
         const data = getData();
         const r = data.find((item) => item.id === id);
         if (!r) return;
+        if (
+          currentUser &&
+          !currentUser.isMaster &&
+          String(r.author || "") !== String(currentUser.id)
+        )
+          return alert("권한이 없습니다.");
         document.getElementById("view-site").value = r.site;
         document.getElementById("view-contact").value = displayKoreanMobile(
           r.contact,
@@ -4769,8 +5311,11 @@
         const month = document.getElementById("unit-exp-month").value;
 
         let all = getExpenses();
-        if (currentUser && !currentUser.isMaster)
-          all = all.filter((e) => e.author === currentUser.id);
+        if (!currentUser) all = [];
+        else if (!currentUser.isMaster)
+          all = all.filter(
+            (e) => String(e.author || "") === String(currentUser.id),
+          );
         expenseDraftRows = all
           .filter((e) => e.year == year && e.month == month)
           .map((e) => ({
