@@ -1612,8 +1612,12 @@
       .stats-monthly-table th,
       .stats-monthly-table td {
         border: 1px solid #182b1a;
+        border-style: solid;
         padding: 6px 4px;
         vertical-align: middle;
+      }
+      .page15-stats-layout .stats-monthly-table .stats-total-row td {
+        border-top: 2px solid #182b1a;
       }
       .stats-monthly-table thead th {
         color: #182b1a;
@@ -2908,9 +2912,7 @@
           </div>
           <div id="stats-legend" class="chart-legend"></div>
           <table class="stats-monthly-table">
-            <thead>
-              <tr id="stats-thead-row"></tr>
-            </thead>
+            <thead id="stats-thead"></thead>
             <tbody id="stats-list"></tbody>
           </table>
           <div id="stats-total" class="sales-total-box stats-total-page15">
@@ -3101,6 +3103,8 @@
       const MASTER_EXPORT_LS_KEY = "pm_master_export_hint";
       const LOGIN_REMEMBER_LS_KEY = "pm_login_remember_id";
       const LOGIN_SAVED_ID_LS_KEY = "pm_saved_login_id";
+      const SESSION_USER_LS_KEY = "pm_app_session_user";
+      const SESSION_LAST_PAGE_LS_KEY = "pm_app_last_page";
       let currentUser = null;
       let currentEditId = null;
       let expenseDraftRows = [];
@@ -3629,7 +3633,100 @@
         syncMasterExportUiVisibility();
         applyRememberedLoginIdUi();
         refreshInSiteDatalist();
+        restoreSessionFromStorage();
       };
+
+      function persistSessionUser() {
+        if (!currentUser) return;
+        try {
+          localStorage.setItem(
+            SESSION_USER_LS_KEY,
+            JSON.stringify({
+              id: currentUser.id,
+              name: currentUser.name,
+              isMaster: !!currentUser.isMaster,
+            }),
+          );
+        } catch (e) {}
+      }
+
+      function clearPersistedSession() {
+        try {
+          localStorage.removeItem(SESSION_USER_LS_KEY);
+          localStorage.removeItem(SESSION_LAST_PAGE_LS_KEY);
+        } catch (e) {}
+      }
+
+      function persistLastPage(pageId) {
+        if (!currentUser) return;
+        if (pageId === "page1" || pageId === "page2") return;
+        try {
+          localStorage.setItem(SESSION_LAST_PAGE_LS_KEY, pageId);
+        } catch (e) {}
+      }
+
+      function readPersistedLastPage() {
+        try {
+          return String(localStorage.getItem(SESSION_LAST_PAGE_LS_KEY) || "");
+        } catch (e) {
+          return "";
+        }
+      }
+
+      function restoreSessionFromStorage() {
+        let raw = "";
+        try {
+          raw = localStorage.getItem(SESSION_USER_LS_KEY) || "";
+        } catch (e) {
+          return;
+        }
+        if (!raw) return;
+        let obj;
+        try {
+          obj = JSON.parse(raw);
+        } catch (e) {
+          clearPersistedSession();
+          return;
+        }
+        if (!obj || typeof obj.id !== "string") {
+          clearPersistedSession();
+          return;
+        }
+        if (obj.isMaster && obj.id === MASTER_ID) {
+          currentUser = {
+            id: MASTER_ID,
+            name: obj.name || "마스터",
+            isMaster: true,
+          };
+        } else {
+          const users = getUsers();
+          const u = users.find((x) => x.id === obj.id);
+          if (!u) {
+            clearPersistedSession();
+            return;
+          }
+          currentUser = { id: u.id, name: u.name, isMaster: false };
+        }
+        const welcomeMsg = `${currentUser.name}님 환영합니다.`;
+        const userInfo = document.getElementById("user-info");
+        if (userInfo) userInfo.innerText = welcomeMsg;
+        const hubEl = document.getElementById("user-info-hub");
+        if (hubEl) hubEl.innerText = welcomeMsg;
+        try {
+          localStorage.setItem(
+            MASTER_EXPORT_LS_KEY,
+            currentUser.isMaster ? "1" : "0",
+          );
+        } catch (e) {}
+        syncMasterExportUiVisibility();
+        const lastPage = readPersistedLastPage();
+        const hasEl =
+          lastPage && document.getElementById(lastPage) ? lastPage : "";
+        const target =
+          hasEl && hasEl !== "page1" && hasEl !== "page2" ? hasEl : "page3";
+        showPage(target);
+        showLoginMaintenancePopupIfAny();
+      }
 
       function applyRememberedLoginIdUi() {
         const idInput = document.getElementById("login-id");
@@ -3671,6 +3768,7 @@
         }
         if (id === "page1") applyRememberedLoginIdUi();
         syncMasterExportUiVisibility();
+        if (currentUser) persistLastPage(id);
       }
 
       function initMaintenanceRegForm() {
@@ -3772,6 +3870,7 @@
         document.getElementById("user-info").innerText = welcomeMsg;
         const hubEl = document.getElementById("user-info-hub");
         if (hubEl) hubEl.innerText = welcomeMsg;
+        persistSessionUser();
         showLoginMaintenancePopupIfAny();
         showPage("page3");
       }
@@ -3890,12 +3989,14 @@
         document.getElementById("user-info").innerText = welcomeMsg2;
         const hubEl2 = document.getElementById("user-info-hub");
         if (hubEl2) hubEl2.innerText = welcomeMsg2;
+        persistSessionUser();
         alert("변경 완료!");
         showPage("page3");
       }
 
       function handleLogout() {
         currentUser = null;
+        clearPersistedSession();
         const loginIdEl = document.getElementById("login-id");
         const loginPwEl = document.getElementById("login-pw");
         if (loginPwEl) loginPwEl.value = "";
@@ -4883,8 +4984,8 @@
         const totalBox = document.getElementById("stats-total");
         const axisEl = document.getElementById("stats-y-axis");
         const legendEl = document.getElementById("stats-legend");
-        const theadRow = document.getElementById("stats-thead-row");
-        if (!chartArea || !listEl || !totalBox || !theadRow) return;
+        const theadEl = document.getElementById("stats-thead");
+        if (!chartArea || !listEl || !totalBox || !theadEl) return;
 
         const statsChartWrap = chartArea.closest(".sales-chart-container");
         const statsChartRow = chartArea.closest(".chart-row-wrap");
@@ -4958,8 +5059,8 @@
             legendEl.style.display = "flex";
           }
 
-          theadRow.innerHTML =
-            '<th class="stats-monthly-th-month"></th><th class="stats-th-net">순수익</th><th class="stats-th-sales">매출</th><th class="stats-th-exp">비용</th>';
+          theadEl.innerHTML =
+            '<tr><th class="stats-monthly-th-month"></th><th class="stats-th-net">순수익</th><th class="stats-th-sales">매출</th><th class="stats-th-exp">비용</th></tr>';
 
           chartArea.innerHTML = "";
           listEl.innerHTML = "";
@@ -5003,47 +5104,51 @@
           chartArea.classList.add("stats-chart-area--site");
           if (statsChartWrap) statsChartWrap.classList.add("stats-chart-site-labels");
           if (statsChartRow) statsChartRow.classList.add("stats-chart-row--site");
-          const siteCounts = new Map();
+          const siteAgg = new Map();
           let yearSched = 0;
           data.forEach((r) => {
             if (r.year != year) return;
             yearSched++;
             const s = String(r.site || "").trim();
             if (!s) return;
-            siteCounts.set(s, (siteCounts.get(s) || 0) + 1);
+            const prev = siteAgg.get(s) || { cnt: 0, sales: 0 };
+            prev.cnt += 1;
+            prev.sales += parseAmount(r.amount);
+            siteAgg.set(s, prev);
           });
-          const ranked = Array.from(siteCounts.entries())
-            .map(([site, cnt]) => ({ site, cnt }))
+          const ranked = Array.from(siteAgg.entries())
+            .map(([site, v]) => ({ site, cnt: v.cnt, sales: v.sales }))
             .sort(
               (a, b) =>
-                b.cnt - a.cnt || a.site.localeCompare(b.site, "ko"),
+                b.sales - a.sales || a.site.localeCompare(b.site, "ko"),
             );
           const top = ranked.slice(0, 10);
-          const maxVal = Math.max(...top.map((x) => x.cnt), 1);
+          const peak = Math.max(...top.map((x) => x.sales), 0);
+          let chartMax = Math.ceil(peak / 250000) * 250000;
+          if (chartMax < 250000) chartMax = 250000;
 
           if (axisEl) {
-            const nTicks = 5;
             const labels = [];
-            for (let i = nTicks - 1; i >= 0; i--) {
-              const raw = Math.round((maxVal * i) / (nTicks - 1));
-              labels.push(`<span>${formatChartAxisInt(raw)}</span>`);
+            for (let i = 4; i >= 0; i--) {
+              const raw = Math.round((chartMax * i) / 4);
+              labels.push(`<span>${formatChartAxis(raw)}</span>`);
             }
             axisEl.innerHTML = labels.join("");
           }
           if (legendEl) {
-            legendEl.innerHTML = `<span class="chart-legend-item"><span class="legend-dot" style="background:#64748b;border:1px solid #182b1a"></span>등록 건수</span>`;
+            legendEl.innerHTML = `<span class="chart-legend-item"><span class="legend-dot" style="background:#4a90e2;border:1px solid #182b1a"></span>누적매출</span>`;
             legendEl.style.display = "flex";
           }
 
-          theadRow.innerHTML =
-            '<th class="stats-th-no">NO.</th><th class="stats-th-site-col">현장명</th><th class="stats-th-sites">등록</th>';
+          theadEl.innerHTML =
+            '<tr><th class="stats-th-no" rowspan="2">NO.</th><th class="stats-th-site-col" rowspan="2">현장명</th><th class="stats-th-sites" colspan="2">누적</th></tr><tr><th class="stats-th-sites">건수</th><th class="stats-th-sales">매출</th></tr>';
           chartArea.innerHTML = "";
           listEl.innerHTML = "";
 
           if (top.length === 0) {
             const row = document.createElement("tr");
             row.innerHTML =
-              '<td colspan="3" style="text-align:center;padding:10px 6px">해당 연도 등록된 현장이 없습니다.</td>';
+              '<td colspan="4" style="text-align:center;padding:10px 6px">해당 연도 등록된 현장이 없습니다.</td>';
             listEl.appendChild(row);
           } else {
             const stack = document.createElement("div");
@@ -5052,14 +5157,14 @@
             barsRow.className = "stats-site-chart-bars-row";
             const labelsRow = document.createElement("div");
             labelsRow.className = "stats-site-chart-labels-row";
-            top.forEach(({ site, cnt }, i) => {
+            top.forEach(({ site, cnt, sales }, i) => {
               const n = i + 1;
               const barWrapper = document.createElement("div");
               barWrapper.className = "chart-bar-wrapper";
               const barHtml =
-                cnt <= 0
+                sales <= 0
                   ? `<div class="chart-bar" style="height:2px;background:#f1f3f5"></div>`
-                  : `<div class="chart-bar" style="height:${(cnt / maxVal) * 100}%;background:#64748b;border:1px solid #182b1a"></div>`;
+                  : `<div class="chart-bar" style="height:${(sales / chartMax) * 100}%;background:#4a90e2;border:1px solid #182b1a"></div>`;
               barWrapper.innerHTML = barHtml;
               barsRow.appendChild(barWrapper);
 
@@ -5083,11 +5188,21 @@
               const tdCnt = document.createElement("td");
               tdCnt.className = "stats-td-sites";
               tdCnt.textContent = cnt + "건";
+              const tdSales = document.createElement("td");
+              tdSales.className = "stats-td-sales";
+              tdSales.textContent = sales > 0 ? formatWon(sales) : "";
               tr.appendChild(tdNo);
               tr.appendChild(tdSite);
               tr.appendChild(tdCnt);
+              tr.appendChild(tdSales);
               listEl.appendChild(tr);
             });
+            const topCountTotal = top.reduce((sum, row) => sum + row.cnt, 0);
+            const topSalesTotal = top.reduce((sum, row) => sum + row.sales, 0);
+            const totalTr = document.createElement("tr");
+            totalTr.className = "stats-total-row";
+            totalTr.innerHTML = `<td class="stats-td-no"></td><td class="stats-td-site-name" style="font-weight:800">계</td><td class="stats-td-sites">${topCountTotal}건</td><td class="stats-td-sales">${formatWon(topSalesTotal)}</td>`;
+            listEl.appendChild(totalTr);
             stack.appendChild(barsRow);
             stack.appendChild(labelsRow);
             chartArea.appendChild(stack);
@@ -5097,11 +5212,11 @@
             yearSched > 0
               ? Math.min(100, Math.round((shownSum / yearSched) * 100))
               : 0;
-          totalBox.innerText = `위 현장은 전체의 ${pct}%입니다`;
+          totalBox.innerText = `위 현장들은 전체 매출의 ${pct}%입니다`;
         } else {
           chartArea.classList.add("stats-chart-area--monthly");
-          theadRow.innerHTML =
-            '<th class="stats-monthly-th-month"></th><th class="stats-th-sites">현장수</th>';
+          theadEl.innerHTML =
+            '<tr><th class="stats-monthly-th-month"></th><th class="stats-th-sites">현장수</th></tr>';
 
           const monthlyCount = Array(12).fill(0);
           data.forEach((r) => {
