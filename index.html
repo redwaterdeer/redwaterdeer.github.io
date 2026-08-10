@@ -223,6 +223,10 @@
         cursor: pointer;
         font-weight: 500;
       }
+      #page1 #login-pw {
+        -webkit-text-security: disc;
+        text-security: disc;
+      }
       #page3 .app-header-banner-img,
       #page14 .app-header-banner-img {
         display: block;
@@ -1878,10 +1882,34 @@
             <p class="sub-text">Perfect Manager</p>
           </header>
           <div class="input-row">
-            <label>ID</label><input type="text" id="login-id" />
+            <label>ID</label
+            ><input
+              type="text"
+              id="login-id"
+              name="pm-login-id"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              inputmode="text"
+              readonly
+              onfocus="this.removeAttribute('readonly')"
+            />
           </div>
           <div class="input-row">
-            <label>PW</label><input type="password" id="login-pw" />
+            <label>PW</label
+            ><input
+              type="text"
+              id="login-pw"
+              name="pm-login-pw"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              inputmode="text"
+              readonly
+              onfocus="this.removeAttribute('readonly')"
+            />
           </div>
           <div class="login-remember-row">
             <input type="checkbox" id="login-remember-id" />
