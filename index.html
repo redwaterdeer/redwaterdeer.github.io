@@ -223,6 +223,20 @@
         cursor: pointer;
         font-weight: 500;
       }
+      #page1 .login-field-proxy {
+        flex: 1;
+        border: none;
+        padding: 0 14px;
+        outline: none;
+        font-size: 16px;
+        font-family: var(--font-num);
+        display: flex;
+        align-items: center;
+        min-height: var(--tap-min);
+        background: #fff;
+        white-space: nowrap;
+        overflow-x: auto;
+      }
       #page1 #login-pw {
         -webkit-text-security: disc;
         text-security: disc;
@@ -1882,34 +1896,32 @@
             <p class="sub-text">Perfect Manager</p>
           </header>
           <div class="input-row">
-            <label>ID</label
-            ><input
-              type="text"
+            <label>ID</label>
+            <div
               id="login-id"
-              name="pm-login-id"
-              autocomplete="off"
+              class="login-field-proxy"
+              contenteditable="true"
+              role="textbox"
+              spellcheck="false"
               autocapitalize="off"
               autocorrect="off"
-              spellcheck="false"
               inputmode="text"
-              readonly
-              onfocus="this.removeAttribute('readonly')"
-            />
+              onkeydown="if(event.key==='Enter'){event.preventDefault();}"
+            ></div>
           </div>
           <div class="input-row">
-            <label>PW</label
-            ><input
-              type="text"
+            <label>PW</label>
+            <div
               id="login-pw"
-              name="pm-login-pw"
-              autocomplete="off"
+              class="login-field-proxy"
+              contenteditable="true"
+              role="textbox"
+              spellcheck="false"
               autocapitalize="off"
               autocorrect="off"
-              spellcheck="false"
               inputmode="text"
-              readonly
-              onfocus="this.removeAttribute('readonly')"
-            />
+              onkeydown="if(event.key==='Enter'){event.preventDefault();}"
+            ></div>
           </div>
           <div class="login-remember-row">
             <input type="checkbox" id="login-remember-id" />
@@ -3724,6 +3736,25 @@
         showLoginMaintenancePopupIfAny();
       }
 
+      function getLoginFieldValue(el) {
+        if (!el) return "";
+        if (el.tagName === "INPUT" || el.tagName === "TEXTAREA")
+          return String(el.value || "");
+        return String(el.textContent || "")
+          .replace(/\u00a0/g, " ")
+          .replace(/\r?\n/g, "");
+      }
+
+      function setLoginFieldValue(el, value) {
+        if (!el) return;
+        const next = value == null ? "" : String(value);
+        if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+          el.value = next;
+          return;
+        }
+        el.textContent = next;
+      }
+
       function applyRememberedLoginIdUi() {
         const idInput = document.getElementById("login-id");
         const chk = document.getElementById("login-remember-id");
@@ -3737,7 +3768,7 @@
           return;
         }
         chk.checked = remember;
-        if (remember && saved) idInput.value = saved;
+        if (remember && saved) setLoginFieldValue(idInput, saved);
       }
 
       function showPage(id) {
@@ -3836,8 +3867,8 @@
       }
 
       function handleLogin() {
-        const id = document.getElementById("login-id").value;
-        const pw = document.getElementById("login-pw").value;
+        const id = getLoginFieldValue(document.getElementById("login-id")).trim();
+        const pw = getLoginFieldValue(document.getElementById("login-pw"));
         const users = getUsers();
 
         let user = users.find((u) => u.id === id && u.pw === pw);
@@ -3995,7 +4026,7 @@
         clearPersistedSession();
         const loginIdEl = document.getElementById("login-id");
         const loginPwEl = document.getElementById("login-pw");
-        if (loginPwEl) loginPwEl.value = "";
+        if (loginPwEl) setLoginFieldValue(loginPwEl, "");
         let remember = false;
         try {
           remember = localStorage.getItem(LOGIN_REMEMBER_LS_KEY) === "1";
@@ -4003,13 +4034,14 @@
         if (loginIdEl) {
           if (remember) {
             try {
-              loginIdEl.value = String(
-                localStorage.getItem(LOGIN_SAVED_ID_LS_KEY) || "",
+              setLoginFieldValue(
+                loginIdEl,
+                String(localStorage.getItem(LOGIN_SAVED_ID_LS_KEY) || ""),
               );
             } catch (e) {
-              loginIdEl.value = "";
+              setLoginFieldValue(loginIdEl, "");
             }
-          } else loginIdEl.value = "";
+          } else setLoginFieldValue(loginIdEl, "");
         }
         showPage("page1");
       }
